@@ -1,0 +1,171 @@
+{% extends 'info_system/base.html' %}
+
+{% block title %}Дашборд - Система учета эндопротезирования{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Дашборд</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addSurgeonModal">
+            <i class="fas fa-user-md me-1"></i> Добавить хирурга
+        </button>
+        <button type="button" class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+            <i class="fas fa-user-md me-1"></i> Добавить пациента
+        </button>
+    </div>
+</div>
+
+<!-- Статистика -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Пациентов</h6>
+                        <h2 class="mb-0">{{ patients.count }}</h2>
+                    </div>
+                    <i class="fas fa-users fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Операций</h6>
+                        <h2 class="mb-0">{{ operations.count }}</h2>
+                    </div>
+                    <i class="fas fa-procedures fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Хирургов</h6>
+                        <h2 class="mb-0">{{ surgeons.count }}</h2>
+                    </div>
+                    <i class="fas fa-user-md fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Последние пациенты -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Последние пациенты</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Фото</th>
+                        <th>ФИО</th>
+                        <th>Возраст</th>
+                        <th>ИМТ</th>
+                        <th>Тип коксартроза</th>
+                        <th>Хирург</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients|slice:":5" %}
+                    <tr>
+                        <td>
+                            {% if patient.photo %}
+                            <img src="{{ patient.photo.url }}" class="patient-photo" alt="{{ patient.last_name }}">
+                            {% else %}
+                            <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ patient.last_name }} {{ patient.first_name }}</td>
+                        <td>{{ patient.age }} лет</td>
+                        <td>{{ patient.bmi|default:"-" }}</td>
+                        <td>{{ patient.get_coxarthrosis_type_display }}</td>
+                        <td>
+                            {% if patient.surgeon %}
+                            {{ patient.surgeon.last_name }}
+                            {% else %}
+                            Не назначен
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Нет пациентов</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-end mt-3">
+            <a href="#" class="btn btn-sm btn-outline-secondary">Все пациенты</a>
+        </div>
+    </div>
+</div>
+
+<!-- Последние операции -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Последние операции</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Пациент</th>
+                        <th>Модель эндопротеза</th>
+                        <th>Хирург</th>
+                        <th>Параметры</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for operation in operations|slice:":5" %}
+                    <tr>
+                        <td>{{ operation.operation_date }}</td>
+                        <td>{{ operation.patient.last_name }} {{ operation.patient.first_name }}</td>
+                        <td>{{ operation.model_name }}</td>
+                        <td>
+                            {% if operation.surgeon %}
+                            {{ operation.surgeon.last_name }}
+                            {% else %}
+                            Не указан
+                            {% endif %}
+                        </td>
+                        <td>
+                            Чашка: {{ operation.cup_size }}мм,
+                            Ножка: {{ operation.stem_number }},
+                            Головка: {{ operation.head_size }}мм
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">Нет операций</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-end mt-3">
+            <a href="#" class="btn btn-sm btn-outline-secondary">Все операции</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

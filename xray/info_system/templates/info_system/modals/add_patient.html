@@ -1,0 +1,105 @@
+<div class="modal fade" id="addPatientModal" tabindex="-1" aria-labelledby="addPatientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" action="{% url 'add_patient' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPatientModalLabel">Добавить пациента</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Фамилия</label>
+                                <input type="text" class="form-control" name="last_name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Имя</label>
+                                <input type="text" class="form-control" name="first_name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Дата рождения</label>
+                                <input type="date" class="form-control" name="birth_date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Пол</label>
+                                <select class="form-select" name="gender">
+                                    <option value="M">Мужской</option>
+                                    <option value="F">Женской</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Фото</label>
+                                <input type="file" class="form-control" name="photo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Рост (см)</label>
+                                <input type="number" step="0.1" class="form-control" name="height">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Вес (кг)</label>
+                                <input type="number" step="0.1" class="form-control" name="weight">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Хирург</label>
+                                <select class="form-select" name="surgeon">
+                                    <option value="">Не назначен</option>
+                                    {% for surgeon in surgeons %}
+                                    <option value="{{ surgeon.id }}">{{ surgeon.last_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label class="form-label">Тип коксартроза</label>
+            <select class="form-select" name="coxarthrosis_type" required>
+                <option value="">Выберите тип...</option>
+                <option value="PRIMARY">Первичный</option>
+                <option value="DYSPLASTIC">Диспластический</option>
+                <option value="POSTTRAUMATIC">Посттравматический</option>
+                <option value="OTHER">Другой</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label class="form-label">Степень коксартроза</label>
+            <input type="number" class="form-control" name="coxarthrosis_grade" min="1" max="4" required>
+        </div>
+    </div>
+</div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

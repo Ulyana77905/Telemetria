@@ -1,0 +1,151 @@
+<div class="modal fade" id="addOperationModal" tabindex="-1" aria-labelledby="addOperationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form method="post" action="{% url 'add_endoprosthesis' %}">
+                {% csrf_token %}
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="addOperationModalLabel">Добавить данные об операции</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Пациент*</label>
+                                <select class="form-select" name="patient" required>
+                                    <option value="">Выберите пациента</option>
+                                    {% for patient in patients %}
+                                    <option value="{{ patient.id }}">{{ patient.last_name }} {{ patient.first_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Хирург</label>
+                                <select class="form-select" name="surgeon">
+                                    <option value="">Не указан</option>
+                                    {% for surgeon in surgeons %}
+                                    <option value="{{ surgeon.id }}">{{ surgeon.last_name }} {{ surgeon.first_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Дата операции*</label>
+                                <input type="date" class="form-control" name="operation_date" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">Параметры эндопротеза</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Модель эндопротеза*</label>
+                                        <input type="text" class="form-control" name="model_name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <label class="form-label">Чашка, мм*</label>
+                                        <input type="number" class="form-control" name="cup_size" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <label class="form-label">Ножка, №*</label>
+                                        <input type="text" class="form-control" name="stem_number" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <label class="form-label">Головка, мм*</label>
+                                        <input type="number" class="form-control" name="head_size" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">Предоперационное планирование</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Чашка, мм (план)</label>
+                                        <input type="number" class="form-control" name="planned_cup_size">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Ножка, № (план)</label>
+                                        <input type="text" class="form-control" name="planned_stem_number">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Глубина погружения, мм</label>
+                                        <input type="number" step="0.1" class="form-control" name="planned_head_immersion">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Диаметр ВВ, мм</label>
+                                        <input type="number" step="0.1" class="form-control" name="acetabular_diameter">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">Рентгенометрические параметры</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Шеечно-диафизарный угол, °</label>
+                                        <input type="number" step="0.1" class="form-control" name="neck_shaft_angle">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Угол Виберга, °</label>
+                                        <input type="number" step="0.1" class="form-control" name="wiberg_angle">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Угол Шарпа, °</label>
+                                        <input type="number" step="0.1" class="form-control" name="sharp_angle">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Покрытие головки, %</label>
+                                        <input type="number" step="0.1" class="form-control" name="head_coverage">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить данные</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

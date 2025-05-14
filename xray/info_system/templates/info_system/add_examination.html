@@ -1,0 +1,107 @@
+<div class="modal fade" id="addExaminationModal" tabindex="-1" aria-labelledby="addExaminationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addExaminationModalLabel">Добавить медицинский осмотр</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'add_examination' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_patient" class="form-label">Пациент</label>
+                            <select class="form-select" id="id_patient" name="patient" required>
+                                <option value="">-- Выберите пациента --</option>
+                                {% for patient in patients %}
+                                <option value="{{ patient.id }}">
+                                    {{ patient.last_name }} {{ patient.first_name }} ({{ patient.age }} лет)
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_doctor" class="form-label">Врач</label>
+                            <select class="form-select" id="id_doctor" name="doctor" required>
+                                <option value="">-- Выберите врача --</option>
+                                {% for doctor in doctors %}
+                                <option value="{{ doctor.id }}">
+                                    {{ doctor.last_name }} {{ doctor.first_name }} ({{ doctor.specialization }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_examination_date" class="form-label">Дата осмотра</label>
+                            <input type="date" class="form-control" id="id_examination_date" name="examination_date" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Рефлюкс</label>
+                            <div class="d-flex">
+                                <div class="me-2 flex-grow-1">
+                                    <select class="form-select" id="id_left_kidney_grade" name="left_kidney_grade" required>
+                                        <option value="">Левая почка</option>
+                                        {% for value, label in Patient.REFLUX_GRADE_CHOICES %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <select class="form-select" id="id_right_kidney_grade" name="right_kidney_grade" required>
+                                        <option value="">Правая почка</option>
+                                        {% for value, label in Patient.REFLUX_GRADE_CHOICES %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_creatinine_level" class="form-label">Уровень креатинина (мг/дл)</label>
+                            <input type="number" step="0.01" min="0" class="form-control" 
+                                   id="id_creatinine_level" name="creatinine_level">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check pt-4">
+                                <input class="form-check-input" type="checkbox" id="id_has_pyelonephritis" name="has_pyelonephritis">
+                                <label class="form-check-label" for="id_has_pyelonephritis">
+                                    Признаки пиелонефрита
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_urine_analysis" class="form-label">Анализ мочи</label>
+                        <textarea class="form-control" id="id_urine_analysis" name="urine_analysis" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_usg_results" class="form-label">Результаты УЗИ</label>
+                        <textarea class="form-control" id="id_usg_results" name="usg_results" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_treatment" class="form-label">Назначенное лечение</label>
+                        <textarea class="form-control" id="id_treatment" name="treatment" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_recommendations" class="form-label">Рекомендации</label>
+                        <textarea class="form-control" id="id_recommendations" name="recommendations" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить осмотр</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
